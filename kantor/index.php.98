@@ -1,0 +1,269 @@
+<?php session_start();
+include 'koneksi.php';
+include 'cek.php';
+include 'statistik.php';
+?>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link rel="apple-touch-icon" sizes="76x76" href="https://showroomqurban.com/favicon-i.png">
+	<link rel="icon" type="image/png" href="https://showroomqurban.com/favicon.png">
+
+	<meta name="googlebot-news" content="index,follow"/>
+	<meta name="googlebot" content="index,follow"/>
+	<meta name="robots" content="index,follow"/>
+	<meta name="language" content="id"/>
+	<meta name="geo.country" content="id"/>
+	<meta name="news_keywords" content="qurban, kambing, qurban tangerang, tangerang, gharar, qurban gharar, kambing gharar, anti gharar">
+	<meta name="keywords" content="qurban, kambing, qurban tangerang, tangerang, gharar, qurban gharar, kambing gharar, anti gharar">
+	<meta http-equiv="content-language" content="In-Id"/>
+	<meta name="geo.placename" content="Indonesia"/>
+	<meta property="fb:pages" content="142246279698643"/>
+	<meta property="fb:app_id" content="586095088077536"/>
+	<meta property="og:image" content="https://showroomqurban.com/oge.png"/>
+	<meta property="og:locale" content="id_ID"/>
+	<meta property="og:type" content="article"/>
+	<meta property="og:title" content="Hewan Qurban adalah Kendaraan Akherat"/>
+	<meta property="og:description" content="Pilih kendaraan akherat terbaik anda di Showroom Qurban"/>
+	<meta property="og:url" content="https://showroomqurban.com/kantor/"/>
+	<meta property="og:image:type" content="image/png"/>
+	<meta property="og:image:width" content="200"/>
+	<meta property="og:image:height" content="200"/>
+	<meta property="og:site_name" content="Showroom Qurban"/>
+	<meta property="article:author" content="142246279698643" itemprop="author"/>
+	
+	<meta name="twitter:card" content="summary_large_image">
+	<meta name="twitter:site" content="@showroom.qur">
+	<meta name="twitter:title" content="Hewan Qurban adalah Kendaraan Akherat">
+	<meta name="twitter:description" content="Pilih kendaraan akherat terbaik anda di Showroom Qurban">
+	<meta name="twitter:image" content="https://showroomqurban.com/og280x150.jpg">
+	<meta name="twitter:image:src" content="og.jpg"/>
+	<meta name="thumbnail" content="https://showroomqurban.com/og600x315.jpg"/>
+
+    <title>Back Office - Showroom Qurban</title>
+
+    <link href="./vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <link href="./vendor/metisMenu/metisMenu.min.css" rel="stylesheet">
+
+    <link href="./dist/css/sb-admin-2.css" rel="stylesheet">
+
+    <link href="./vendor/morrisjs/morris.css" rel="stylesheet">
+
+    <link href="./vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+</head>
+ <script src="./vendor/jquery/jquery.min.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="./vendor/bootstrap/js/bootstrap.min.js"></script>
+
+    <!-- Metis Menu Plugin JavaScript -->
+    <script src="./vendor/metisMenu/metisMenu.min.js"></script>
+
+   
+
+    <!-- Custom Theme JavaScript -->
+    <script src="./dist/js/sb-admin-2.js"></script>
+<body>
+
+    <div id="wrapper">
+
+        <!-- Navigation -->
+        <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="index.html">Showroom Qurban</a>
+            </div>
+            <!-- /.navbar-header -->
+
+
+            <div class="navbar-default sidebar" role="navigation">
+                <div class="sidebar-nav navbar-collapse">
+                    <ul class="nav" id="side-menu">
+                        <li>
+                            <a href="index.php"><i class="fa fa-dashboard fa-fw"></i> Panel Kerja</a>
+                        </li>
+<?php if($_SESSION["akses"] != "marketing"){
+	echo '
+                        <li>
+                            <a href="?act=input"><i class="fa fa-edit fa-fw"></i> Input Hewan</a>
+						</li>
+						';
+}
+?>
+						<li>
+                            <a href="?act=kensel"><i class="fa fa-edit fa-fw"></i> Edit/Batal Order</a>
+						</li>
+						<li>
+                            <a href="?act=order"><i class="fa fa-gitlab fa-fw"></i> Input Order</a>
+                        </li>
+						<li>
+                            <a href="?act=logout"><i class="glyphicon glyphicon-log-out"></i> Logout</a>
+                        </li>
+						
+                    </ul>
+                </div>
+                <!-- /.sidebar-collapse -->
+            </div>
+            <!-- /.navbar-static-side -->
+        </nav>
+<?php 
+	//lihat user yg login
+	$aktif_user = $_SESSION['akses'];
+	$nm_us = $_SESSION['nama'];
+	
+	//jika marketing
+	if($aktif_user == 'marketing'){
+	$tawar =0;
+	$lunas =0;
+	$keep =0;
+	$total =0;
+	$qdat = mysql_query("SELECT `pemilik`,`alamat`,`lunas`,`harga_baru` FROM `$db`.`hewan` where `showroom_view` = '$nm_us'");
+	while ($dat = mysql_fetch_array($qdat)){
+		//jika lunas, hitung
+		if($dat['lunas'] == 'lunas'){
+			$lunas++;
+		}else if($dat['lunas'] == 'keep'){
+			$keep++;
+		}else{
+			$tawar++;
+		}
+	}
+	$total = $keep+$lunas;
+	}
+	
+	if(isset($_GET['act'])){
+		if ($_GET['act'] == "input"){
+			include 'inp_hwn.php';
+		}else if($_GET['act'] == "order"){
+			include 'order1.php';
+		}else if($_GET['act'] == "kensel"){
+			include 'batal.php';
+		}else{
+		
+		}
+	}else{	
+		echo '    <div id="page-wrapper">
+				<div class="row">
+					<div class="col-lg-12">
+						<h1 class="page-header">Bissmillah</h1>
+					</div>
+					<!-- /.col-lg-12 -->
+				</div>
+				<!-- /.row -->
+				<div class="row">
+					<div class="col-lg-3 col-md-6">
+						<div class="panel panel-primary">
+							<div class="panel-heading">
+								<div class="row">
+									<div class="col-xs-3">
+										<i class="fa fa-gitlab fa-5x"></i>
+									</div>
+									<div class="col-xs-9 text-right">
+										<div class="huge">'.$tawar.'</div>
+										<div>Hewan ditawarkan!</div>
+									</div>
+								</div>
+							</div>
+							<a href="#">
+								<div class="panel-footer">
+									<span class="pull-left">View Details</span>
+									<span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+									<div class="clearfix"></div>
+								</div>
+							</a>
+						</div>
+					</div>
+					<div class="col-lg-3 col-md-6">
+						<div class="panel panel-green">
+							<div class="panel-heading">
+								<div class="row">
+									<div class="col-xs-3">
+										<i class="fa fa-money fa-5x"></i>
+									</div>
+									<div class="col-xs-9 text-right">
+										<div class="huge">'.$lunas.'</div>
+										<div>Lunas!</div>
+									</div>
+								</div>
+							</div>
+							<a href="#">
+								<div class="panel-footer">
+									<span class="pull-left">View Details</span>
+									<span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+									<div class="clearfix"></div>
+								</div>
+							</a>
+						</div>
+					</div>
+					<div class="col-lg-3 col-md-6">
+						<div class="panel panel-yellow">
+							<div class="panel-heading">
+								<div class="row">
+									<div class="col-xs-3">
+										<i class="fa fa-shopping-cart fa-5x"></i>
+									</div>
+									<div class="col-xs-9 text-right">
+										<div class="huge">'.$total.'</div>
+										<div>Order!</div>
+									</div>
+								</div>
+							</div>
+							<a href="#">
+								<div class="panel-footer">
+									<span class="pull-left">View Details</span>
+									<span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+									<div class="clearfix"></div>
+								</div>
+							</a>
+						</div>
+					</div>
+					<div class="col-lg-3 col-md-6">
+						<div class="panel panel-red">
+							<div class="panel-heading">
+								<div class="row">
+									<div class="col-xs-3">
+										<i class="fa fa-support fa-5x"></i>
+									</div>
+									<div class="col-xs-9 text-right">
+										<div class="huge">'.$keep.'</div>
+										<div>Pending!</div>
+									</div>
+								</div>
+							</div>
+							<a href="#">
+								<div class="panel-footer">
+									<span class="pull-left">View Details</span>
+									<span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+									<div class="clearfix"></div>
+								</div>
+							</a>
+						</div>
+					</div>
+				</div>
+				'.$statistik.'
+				<!-- /.row -->
+			</div>';
+		}
+?>   
+
+    </div>
+  
+   
+
+</body>
+
+</html>

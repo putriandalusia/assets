@@ -1,0 +1,122 @@
+
+    <div class="main main-raised">
+        <div class="section">
+               <div class="container">
+			   <?php 	echo $pesan;	   
+			   ?>
+                   <h2 class="section-title">3 Jenis Kambing</h2>
+				   
+				   
+                   <div class="row">
+				   
+                        <?php
+						$qdg = mysql_query("SELECT * FROM `$db`.`hewan` WHERE `lunas` IS NULL AND `kategori` = 'DG' ORDER BY `hewan`.`no` ASC");
+						$kdg = mysql_fetch_array($qdg);
+						echo panelk($kdg, $db); ?>
+                        
+						<?php 
+						$qdg1 = mysql_query("SELECT * FROM `$db`.`hewan` WHERE `lunas` IS NULL AND `kategori` = 'DT' ORDER BY `hewan`.`no` ASC");
+						$kdg1 = mysql_fetch_array($qdg1);
+						echo panelk($kdg1, $db); ?>
+                        
+						<?php 
+						$qdg2 = mysql_query("SELECT * FROM `$db`.`hewan` WHERE `lunas` IS NULL AND `kategori` = 'K' ORDER BY `hewan`.`no` ASC");
+						$kdg2 = mysql_fetch_array($qdg2);
+						echo panelk($kdg2, $db); ?>
+                      
+                   </div>
+               </div>
+        </div><!-- section -->
+
+        <div class="section">
+            <div class="container">
+				<h2 class="section-title">Pilih Hewan Terbaik Anda</h2>
+				<div class="row">
+					<div class="col-md-3">
+						<div class="card card-refine card-plain">
+							<div class="card-content">
+								<h4 class="card-title">
+									Filter Kambing
+									<button class="btn btn-default btn-fab btn-fab-mini btn-simple pull-right" rel="tooltip" title="Reset Filter">
+										<i class="material-icons">cached</i>
+									</button>
+								</h4>
+								<form method="GET">
+								<div class="panel panel-default panel-rose">
+									<div class="panel-heading" role="tab" id="headingOne">
+										<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+											<h4 class="panel-title">Rentang Harga</h4>
+											<i class="material-icons">keyboard_arrow_down</i>
+										</a>
+									</div>
+									<div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+										<div class="panel-body panel-refine">
+											<span id="price-left" class="price-left pull-left" data-currency="Rp ">1500000</span>
+											<span id="price-right" class="price-right pull-right" data-currency="Rp ">5000000</span>
+											<div class="clearfix"></div>
+											<input id="filaw" type="hidden" name="filaw"/>
+											<input id="filak" type="hidden" name="filak"/>
+											<div id="sliderRefine" class="slider slider-rose"></div>
+										</div>
+									</div>
+								</div>
+
+								<div class="panel panel-default panel-rose">
+									<div class="panel-heading" role="tab" id="headingTwo">
+										<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="ecommerce.html#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+											<h4 class="panel-title">Jenis Kambing</h4>
+											<i class="material-icons">keyboard_arrow_down</i>
+										</a>
+									</div>
+									<div id="collapseTwo" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingTwo">
+										<div class="panel-body">
+										
+											<div class="checkbox">
+												<label>
+													<input type="checkbox" value="" data-toggle="checkbox" checked="" name="DT">
+													Domba Tanduk
+												</label>
+											</div>
+
+											<div class="checkbox">
+												<label>
+													<input type="checkbox" value="" data-toggle="checkbox" name="K" >
+													Kambing
+												</label>
+											</div>
+
+											<div class="checkbox">
+												<label>
+													<input type="checkbox" value="" data-toggle="checkbox" name="DG">
+													Domba Gemuk
+												</label>
+											</div>
+											
+										</div>
+										
+									</div>
+								</div>
+								<div class="panel panel-default ">
+								<button class="btn btn-warning btn-round" name="filter">
+								<i class="material-icons">search</i> Cari...
+							</button></div>
+
+											</form>
+							</div>
+						</div><!-- end card -->
+					</div>
+
+					<div class="col-md-9">
+	   					<div class="row">
+						<?php echo $halis ;?>
+	   					
+						<div class="col-md-3 col-md-offset-4">
+	   							   <?php echo $pegi;?>
+	   						  </div>
+	   					</div>
+	   				</div>
+				</div>
+	</div>
+        </div><!-- section -->
+
+	</div> <!-- end-main-raised -->
